@@ -12,5 +12,5 @@ export default () => {
     <>
       <button onClick={onLogOutClick}>Log Out</button>
     </>
-  ); 
+  );
 };
