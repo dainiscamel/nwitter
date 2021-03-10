@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { authService } from "fbase";
+import React, { useEffect, useState } from "react";
+import { authService, dbService } from "fbase";
 import { useHistory } from "react-router-dom";
 
 export default ({ refreshUser, userObj }) => {
@@ -9,6 +9,8 @@ export default ({ refreshUser, userObj }) => {
     authService.signOut();
     history.push("/");
   };
+
+  
   const onChange = (event) => {
     const {
       target: { value },
@@ -24,6 +26,18 @@ export default ({ refreshUser, userObj }) => {
       refreshUser();
     }
   };
+  const getMyNweets = async () => {
+    const nweets = await dbService
+      .collection("nweets")
+      .where("creatorId", "==", userObj.uid)
+      .orderBy("createdAt")
+      .get();
+    console.log('ㅇㅗ잉',nweets.docs.map((doc) => doc.data()));
+  };
+
+  useEffect(() => {
+    getMyNweets();
+  }, []);
   return (
     <>
       <form onSubmit={onSubmit}>
